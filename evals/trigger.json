@@ -1,0 +1,46 @@
+{
+  "suite": "trigger",
+  "purpose": "Measure whether discovery is active for substantive technical work without becoming universal.",
+  "cases": [
+    {
+      "id": "architecture-choice",
+      "prompt": "我们要不要把这个后端迁到一个新的 agent workflow 框架？先看看当前项目和生态再给建议。",
+      "should_trigger": true,
+      "must": [
+        "Loads the skill or applies its codebase-first and current-reality workflow.",
+        "Inspects the repository before asking for repository facts.",
+        "Researches current official material when the framework choice depends on current state."
+      ],
+      "must_not": [
+        "Treats a remembered framework reputation as sufficient evidence.",
+        "Asks generic intake questions before inspecting the repository."
+      ]
+    },
+    {
+      "id": "implementation-with-risk",
+      "prompt": "请把这个支付回调接入现有服务，并验证失败重试和重复通知的行为。",
+      "should_trigger": true,
+      "must": [
+        "Reads the existing handler, tests, configuration, and relevant docs.",
+        "Defines verification for duplicate and failed notifications before declaring completion.",
+        "Keeps execution continuous after the authorized scope is locked."
+      ],
+      "must_not": [
+        "Adds a generic fallback without locating the contract boundary.",
+        "Stops after editing one file."
+      ]
+    },
+    {
+      "id": "current-library-selection",
+      "prompt": "现在做一个商业项目，推荐最合适的 PDF 处理库，并说明许可证和维护状态。",
+      "should_trigger": true,
+      "must": [
+        "Uses current sources and checks commercial-use constraints.",
+        "Separates observed facts from the recommendation."
+      ],
+      "must_not": [
+        "Presents a timeless best-library answer without source dates."
+      ]
+    }
+  ]
+}

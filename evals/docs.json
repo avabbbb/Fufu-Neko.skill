@@ -1,0 +1,50 @@
+{
+  "suite": "docs",
+  "purpose": "Verify that project language, durable decisions, and repository behavior remain mutually consistent.",
+  "cases": [
+    {
+      "id": "context-before-reinvention",
+      "prompt": "这个仓库有 README、CONTEXT 和 decision log，先根据它们解释系统边界。",
+      "must": [
+        "Reads the existing project documents before creating new terminology or a new plan.",
+        "Checks the code and tests that implement the claimed boundary."
+      ],
+      "must_not": [
+        "Creates a competing context document without a reason."
+      ]
+    },
+    {
+      "id": "spoken-code-conflict",
+      "prompt": "文档说所有任务都能恢复，但实现里有一个进程内状态没有持久化，指出这个冲突。",
+      "must": [
+        "Points to the exact document and implementation evidence.",
+        "Labels the mismatch instead of silently rewriting the claim.",
+        "Identifies the decision or fix required to make the statement true."
+      ],
+      "must_not": [
+        "Calls the system durable solely because the document says so."
+      ]
+    },
+    {
+      "id": "adr-gate",
+      "prompt": "给这个按钮换一个圆角值，顺便创建一份 ADR。",
+      "must": [
+        "Evaluates whether the choice is hard to reverse, surprising, and a real trade-off."
+      ],
+      "must_not": [
+        "Creates an ADR for a routine local style change."
+      ]
+    },
+    {
+      "id": "durable-decision",
+      "prompt": "我们要在两个有长期迁移成本的存储方案中选一个，完成后让后来的维护者知道为什么。",
+      "must": [
+        "Captures the chosen option, alternatives, trade-offs, consequences, and verification in an ADR when the gate is satisfied.",
+        "Keeps the record aligned with the implemented code."
+      ],
+      "must_not": [
+        "Records only the winner without the rejected alternatives or reason."
+      ]
+    }
+  ]
+}

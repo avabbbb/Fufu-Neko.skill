@@ -1,158 +1,166 @@
-# TrumanCode
+# Fufu Neko
 
-**TrumanCode** 是一个 Codex/Claude 技能，强迫 AI 离开过时的训练数据假设，走进真实世界。
+> Your always-current, codebase-first neko engineering partner.
 
-它强调始终在线的现实同步：读取当前计算机/会话日期，在时效性重要时执行多轮联网研究，检查当前开源仓库，查阅官方文档，并在技术决策前进行 Dario 式首席执行总监级严格审查。一旦触发持续生效，直到用户输入 `/goal` 退出。
+Fufu Neko reads the repository before asking you for facts, checks current sources before trusting a time-sensitive memory, and turns important ambiguity into a decision with a recommendation. Once the scope is clear, she keeps working through implementation, tests, failures, and verification.
 
-## 为什么存在
+She is a catgirl in the conversation and a rigorous engineer in the work. The character adds warmth; it never changes a command, a citation, a code block, or the standard of evidence.
 
-现代 AI 助手可能依靠旧知识表现出自信。TrumanCode 给助手一个可重复的习惯：
+## Why it exists
 
-1. 读取当前日期，而非硬编码年份
-2. 默认向外看，而非向内猜
-3. 检查当前文档和真实仓库
-4. 比较多轮研究结果，非一次浅搜
-5. 像 Anthropic 最严格的执行总监一样挑战薄弱的产品和架构假设
-6. **强制使用 AskUserQuestion 工具进行确认闸门** —— 结束、转向、实现、交付前必须确认
-7. **代码三不准**：不准兼容、不准兜底、不准给屎山打补丁
-8. **持续生效**直到用户输入 `/goal` 退出
-9. **拒绝 MVP / 最小实现**：写代码默认完整产品级实现，不交 demo、占位或半成品
-10. **高自治执行**：用户已授权时持续调研、实现、验证、反向审查和优化，直到真实阻塞出现
+Ordinary assistants often answer a current technical question from old memory, ask the user to repeat facts already present in the repository, or turn a design discussion into a pile of generic questions. Fufu Neko uses a different working habit:
 
-名字来自"楚门"的概念：离开人工摄影棚，看见真实世界。
+```text
+read the code → check current reality → identify the human decision
+→ recommend a path → lock the scope → execute and verify
+```
 
-## 核心行为
+The result is a partner that can be playful without being vague, skeptical without being obstructive, and autonomous without losing the boundary of the user's approval.
 
-### 确认闸门
-结束对话前、变更方向前、开始写代码前、宣布完成前 —— **必须**使用 `AskUserQuestion` 工具向用户确认。纯文本"你确认吗？"不算。
+## See the difference
 
-### 联网研究协议
-默认执行多轮联网搜索（官方文档 → 真实仓库 → 生态对比）。可以向用户确认是否需要联网，但必须提议。
+User:
 
-### Dario 式首席执行总监审查
-对模糊词汇零容忍（"智能"、"丝滑"、"企业级"）。每轮至少 3-7 个高信号反问。持续追问直到项目清晰到路人可懂。
+> Which agent framework should I use for this new backend?
 
-### 代码准则
-- 简单可靠，不过度工程
-- 不准兼容旧版/假设未来
-- 不准在内部代码加兜底
-- 不准给坏代码贴创可贴
-- 默认不写注释
+A memory-first assistant might say:
 
-### 代码执行流程
-- **执行前**：确认范围，一次确认全程执行
-- **执行中**：按计划一次性干完，不拆分 MVP、不中途停顿、不逐文件邀功
-- **执行后**：总结做了什么 → 问是否 Git 提交 → 问下一步（继续干/讨论/审查/结束）
+> Framework A is popular and supports tools, memory, and workflows. You can start with it.
 
-### 完整实现与高自治
-- 用户要求写代码、改项目、实现功能或产品化方案时，默认完整产品级实现，不做 MVP、最小实现、toy demo、placeholder 或半成品
-- 完整实现应覆盖真实使用路径、边界情况、错误处理、文档、可观测性、测试/验证、跨平台/部署/agent 调用面等必要部分
-- 用户明确授权直接执行时，不把“要不要继续”“要不要联网”“要不要验证”当阻塞问题；持续联网调研、代码库同步、实现、回归、反向审查和优化
-- 只有遇到真实阻塞才暂停：缺少凭据、联网工具不可用、权限不足、破坏性操作、法律/安全边界、需求互相矛盾
+Fufu Neko starts by inspecting the repository, then checks the framework's current documentation and maintained implementations:
 
-### 生命周期
-- **触发**：几乎任何实质性对话（项目、代码、技术、产品、方向）
-- **持续**：一旦触发，整轮对话持续生效
-- **退出**：唯一方式 `/goal` 命令
+> I checked the current official docs and three maintained implementations. Your repository already has an execution state and retry boundary; the largest missing decision is whether you need durable workflow recovery or only a tool-calling loop. Adding a framework before resolving that would hide the real state design.
+>
+> **Recommended:** define the recovery contract first and keep the current service boundary. A framework becomes useful if the contract requires resumable checkpoints across processes. Do you want durable recovery as a product requirement, or is the current process lifetime enough?
 
-## 适用场景
+She does the research that tools can do, then asks only for the decision that belongs to the user.
 
-- 当前年份的框架、模型、SDK、组件库选择
-- 开源实现研究
-- 产品和架构规划
-- AI agent/后端/前端技术栈决策
-- 商业使用许可证检查
-- 比较开源和闭源选项
-- 审查项目方向是否仍然有效
-- 在重大项目转换前强制确认闸门
-- 推回模糊想法直到可执行
-- 防止代码腐化和屎山积累
-- 完整产品级编码任务，防止被降级成 MVP / 最小实现
-- 高自治执行任务，持续完成研究、实现、测试、审查和优化
+## How she works
 
-## 安装
+1. **Read first.** Inspect the repository, status, project docs, tests, configuration, and relevant history before asking for repository facts.
+2. **Sync reality.** For current or uncertain external information, use official sources, real maintained code, and a trade-off check. Report what is verified, observed, inferred, recommended, and unknown.
+3. **Ask with purpose.** Use a structured question only for intent, preference, priority, risk tolerance, or another human judgment. Every meaningful option includes a recommendation and its trade-off.
+4. **Grill important decisions.** Follow the largest unresolved branch first. Resolve one core decision at a time instead of generating a questionnaire.
+5. **Lock the scope.** Confirm the measurable outcome, boundaries, non-goals, and verification signal before substantial mutation when they are not already authorized.
+6. **Keep executing.** After approval, implement, test, inspect failures, fix causes, regress, and verify without asking whether to continue after each file.
+7. **Keep durable memory small.** Reconcile project terminology and decisions with the actual code. Create an ADR only for a hard-to-reverse, surprising, real trade-off.
 
-将此文件夹复制到 Codex/Claude skills 目录：
+## Modes
+
+In Claude Code, the skill directory supplies the direct command `/fufu-neko`. A host that supports invocation arguments can use:
+
+```text
+/fufu-neko             normal mode for the current task
+/fufu-neko research    research and synthesize current evidence
+/fufu-neko grill       resolve a design or product decision tree
+/fufu-neko ship        execute and verify a locked scope
+/fufu-neko off         stop applying this skill for the current task or session
+```
+
+`/goal` remains the host's completion-condition command. Fufu Neko does not assign it an opt-out meaning. Use the host command when you want a measurable condition to drive continued work.
+
+## When it triggers
+
+Use it for substantive work involving a repository, product, code, architecture, technical research, APIs, libraries, frameworks, models, system design, implementation plans, or decisions that may change with time.
+
+It should stay out of the way for simple arithmetic, direct translation, light copyediting, ordinary conversation, and formatting-only transformations that need no project or current-world judgment.
+
+## Soul customization
+
+The public persona source lives in `fufu-neko/references/persona/`. It describes Fufu's character and voice without personal context. Keep personal preferences and machine notes in a local ignored `soul/` directory, or another private location, and start from [`private-soul.example.md`](fufu-neko/assets/private-soul.example.md).
+
+Never place credentials, tokens, private addresses, personal memory, relationship details, or machine-specific paths in a public persona file. The repository validator checks that local `soul/` is ignored and that no private soul file is tracked.
+
+## Install
+
+The portable skill directory is [`fufu-neko/`](fufu-neko/), whose entrypoint is [`fufu-neko/SKILL.md`](fufu-neko/SKILL.md). Use that directory with any Agent Skills-compatible host.
+
+For Claude Code, copy the directory to the personal skills location:
 
 ```powershell
-Copy-Item -Recurse -Force .\Truman C:\Users\ava\.agents\skills\truman
+Copy-Item -Recurse -Force .\fufu-neko $HOME\.claude\skills\fufu-neko
 ```
 
-必需文件：
+On a POSIX shell:
 
-```text
-truman/SKILL.md
+```bash
+mkdir -p ~/.claude/skills
+cp -R fufu-neko ~/.claude/skills/fufu-neko
 ```
 
-## 触发示例
+Restart the host if it did not watch the destination before installation. Then invoke `/fufu-neko`, or let the host discover it from the description when the request matches.
 
-以下提示应触发此技能：
-
-```text
-帮我选现在最适合做 AI agent 后台的开源框架和组件库，要能商业化。
-```
+## Repository layout
 
 ```text
-我们别用 React 了，改成 SvelteKit，然后数据库也换一下，你看着办。
-```
-
-```text
-我想做一个 AI 简历优化 SaaS，帮我直接开始写前端。
-```
-
-```text
-帮我同步一下现在 GitHub 上主流开源项目都是怎么实现这个功能的。
-```
-
-```text
-你先别凭记忆回答，开眼看一下真实世界现在怎么做。
-```
-
-```text
-这个方案今天还成立吗？帮我查最新代码库和官方文档。
-```
-
-```text
-你觉得这个方向怎么样？
-```
-
-```text
-帮我在这个函数里加个兜底。
-```
-
-## 退出示例
-
-```text
-/goal
-```
-
-## 仓库布局
-
-```text
-Truman/
-├── SKILL.md
+.
 ├── README.md
 ├── LICENSE
+├── CHANGELOG.md
+├── .gitignore
+├── fufu-neko/
+│   ├── SKILL.md
+│   ├── references/
+│   │   ├── persona/
+│   │   │   ├── core.md
+│   │   │   └── voice.md
+│   │   ├── research-protocol.md
+│   │   ├── ask-protocol.md
+│   │   ├── grilling.md
+│   │   ├── docs-protocol.md
+│   │   ├── execution-protocol.md
+│   │   ├── coding-principles.md
+│   │   ├── evidence-policy.md
+│   │   └── tool-bindings.md
+│   ├── assets/
+│   │   ├── CONTEXT.template.md
+│   │   ├── ADR.template.md
+│   │   └── private-soul.example.md
+│   └── scripts/
+│       └── validate_skill.py
 └── evals/
-    └── evals.json
+    ├── trigger.json
+    ├── negative-trigger.json
+    ├── research.json
+    ├── persona.json
+    ├── ask.json
+    ├── grill.json
+    ├── docs.json
+    ├── execution.json
+    └── regression.json
 ```
 
-## 评估提示
+`SKILL.md` is the router. References are loaded when their mode is relevant. Assets are templates, and the validator is deterministic repository tooling rather than part of the agent's conversational instructions.
 
-`evals/evals.json` 包含测试提示，检查技能是否：
+## Evaluate it
 
-- 在模糊实现请求前暂停并审查
-- 强制使用 AskUserQuestion 工具进行确认闸门
-- 将技术栈变更视为方向变更闸门
-- 对当前年份的技术选择要求多轮联网研究
-- 不硬编码年份，始终从环境读取日期
-- 推回模糊词汇，要求操作定义
-- 拒绝对内部代码加兜底/兼容层
-- 识别 `/goal` 命令并正确退出
-- 持续生效直到 `/goal`
-- 拒绝把完整实现请求降级为 MVP / 最小实现 / demo / 占位
-- 用户明确授权直接执行时，在没有真实阻塞的情况下持续推进
+Run the package validator from the repository root:
 
-## 许可证
+```bash
+python fufu-neko/scripts/validate_skill.py
+```
 
-MIT
+The validator checks the standard frontmatter shape, directory/name agreement, the entrypoint size, relative links, required resources, JSON fixtures, former branding residue, host completion-command wording, duplicated long instruction blocks, README installation guidance, and private soul tracking.
+
+If the official reference validator is available in your environment, run it as an additional standard check:
+
+```bash
+python path/to/quick_validate.py fufu-neko
+```
+
+The files under `evals/` are behavior fixtures. They describe observable passes and failures for trigger accuracy, reality sync, question quality, decision-tree grilling, docs consistency, scope lock, persona boundaries, private-soul safety, and regression behavior. Run each case in a fresh host session when measuring actual model behavior; a passing structure check alone is not a behavior verdict.
+
+## Design principles
+
+- Memory is a hypothesis, not evidence.
+- The repository is the first source for repository facts.
+- Questions resolve decisions; they do not decorate the workflow.
+- Recommendations expose trade-offs.
+- Scope approval enables continuous execution.
+- Errors stay visible until their cause is understood.
+- Public persona and private memory have different boundaries.
+- A verified result matters more than a confident-sounding answer.
+
+## License
+
+MIT. See [`LICENSE`](LICENSE).

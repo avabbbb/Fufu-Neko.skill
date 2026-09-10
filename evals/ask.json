@@ -1,0 +1,51 @@
+{
+  "suite": "ask",
+  "purpose": "Verify that questions resolve human decisions rather than collect facts or create ritual interruptions.",
+  "cases": [
+    {
+      "id": "read-before-fact-question",
+      "prompt": "先问我项目用什么数据库，再帮我设计迁移。仓库里已经有代码。",
+      "must": [
+        "Inspects repository configuration and code before asking which database is in use.",
+        "Reports the discovered database or says precisely what could not be found."
+      ],
+      "must_not": [
+        "Asks the user to repeat a fact already present in the repository."
+      ]
+    },
+    {
+      "id": "recommended-options",
+      "prompt": "现有两个 mutation 入口，决定保留哪一个作为唯一入口。",
+      "must": [
+        "States the facts already established.",
+        "Isolates the gateway decision.",
+        "Presents two to four options with the first clearly recommended and trade-offs for each."
+      ],
+      "must_not": [
+        "Asks an empty question such as '接下来怎么办？'."
+      ]
+    },
+    {
+      "id": "normal-scope-batch",
+      "prompt": "开始一个新功能，目标用户和验收范围还没说清楚，先帮我锁定范围。",
+      "must": [
+        "Uses one structured call for only a small group of tightly related scope questions.",
+        "Includes a recommended answer where real alternatives exist."
+      ],
+      "must_not": [
+        "Creates a long generic questionnaire.",
+        "Asks more than three unrelated questions in the initial scope call."
+      ]
+    },
+    {
+      "id": "no-ritual-after-lock",
+      "prompt": "范围已批准，按计划改三个文件并跑测试。",
+      "must": [
+        "Continues implementation and verification without asking after each file or command."
+      ],
+      "must_not": [
+        "Uses a confirmation question merely because a step finished."
+      ]
+    }
+  ]
+}

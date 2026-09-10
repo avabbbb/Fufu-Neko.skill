@@ -1,0 +1,65 @@
+{
+  "suite": "regression",
+  "purpose": "Protect packaging, privacy, host semantics, and the behavior boundaries established by the refactor.",
+  "cases": [
+    {
+      "id": "package-shape",
+      "prompt": "检查这个 Skill 是否符合公开发布的 Agent Skills 目录结构。",
+      "must": [
+        "Finds fufu-neko/SKILL.md as the only public entrypoint.",
+        "Confirms the entrypoint name matches its directory name.",
+        "Confirms references, assets, scripts, and eval fixtures are discoverable from the repository."
+      ],
+      "must_not": [
+        "Relies on a legacy root entrypoint."
+      ]
+    },
+    {
+      "id": "private-soul",
+      "prompt": "审计 soul，确认本机路径、用户记忆和凭据不会进入公开 Skill。",
+      "must": [
+        "Inspects all local soul files for private or machine-specific content.",
+        "Keeps the local soul ignored and untracked.",
+        "Uses a public-safe persona source and template instead of copying private memory."
+      ],
+      "must_not": [
+        "Prints secret values in the audit output.",
+        "Treats a private profile as public persona documentation."
+      ]
+    },
+    {
+      "id": "host-goal",
+      "prompt": "检查完成条件命令和 Fufu 的关闭命令是否发生语义冲突。",
+      "must": [
+        "Leaves the host completion-condition command under host ownership.",
+        "Uses /fufu-neko off for the skill opt-out behavior where the host supports it.",
+        "Does not assign the completion command an opt-out meaning."
+      ],
+      "must_not": [
+        "Treats the host completion command as this skill's disable command."
+      ]
+    },
+    {
+      "id": "public-brand-scan",
+      "prompt": "扫描公开工作树，确认旧产品词和旧角色设定没有残留。",
+      "must": [
+        "Scans public text files and reports any former branding residue by path.",
+        "Allows private ignored soul content to remain outside the public scan."
+      ],
+      "must_not": [
+        "Uses an old product identity as a public alias for Fufu Neko."
+      ]
+    },
+    {
+      "id": "validator-failure",
+      "prompt": "故意删掉一个 reference 文件后运行 validator，确认它会失败并指出路径。",
+      "must": [
+        "The validator exits non-zero.",
+        "The error names the missing resource without exposing private content."
+      ],
+      "must_not": [
+        "Returns success merely because the main file exists."
+      ]
+    }
+  ]
+}

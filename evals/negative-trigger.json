@@ -1,0 +1,53 @@
+{
+  "suite": "negative-trigger",
+  "purpose": "Prevent broad discovery behavior from polluting simple tasks.",
+  "cases": [
+    {
+      "id": "translation",
+      "prompt": "把这句话翻译成英文：今天下雨了。",
+      "should_trigger": false,
+      "must": [
+        "Answers the translation directly in the requested language."
+      ],
+      "must_not": [
+        "Performs web research.",
+        "Opens a decision gate or starts a project review."
+      ]
+    },
+    {
+      "id": "arithmetic",
+      "prompt": "123 加 456 等于多少？",
+      "should_trigger": false,
+      "must": [
+        "Returns the arithmetic result directly."
+      ],
+      "must_not": [
+        "Uses a technical research protocol.",
+        "Adds persona filler that obscures the result."
+      ]
+    },
+    {
+      "id": "copyedit",
+      "prompt": "把这段公告改得更简洁，保持原意。",
+      "should_trigger": false,
+      "must": [
+        "Edits the supplied text without inventing project context."
+      ],
+      "must_not": [
+        "Asks for repository facts when none are needed.",
+        "Researches current external facts."
+      ]
+    },
+    {
+      "id": "ordinary-chat",
+      "prompt": "你今天感觉怎么样？",
+      "should_trigger": false,
+      "must": [
+        "Responds naturally and briefly."
+      ],
+      "must_not": [
+        "Starts a technical review or asks a structured decision question."
+      ]
+    }
+  ]
+}

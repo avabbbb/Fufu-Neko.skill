@@ -1,0 +1,56 @@
+{
+  "suite": "research",
+  "purpose": "Verify fresh, source-aware recommendations and honest uncertainty.",
+  "cases": [
+    {
+      "id": "official-plus-code",
+      "prompt": "比较当前三个 agent SDK，要求给出今天还能成立的商业化建议。",
+      "must": [
+        "Reads the current session date as the freshness baseline.",
+        "Checks official documentation or release material for each serious candidate.",
+        "Checks maintained real implementations or examples.",
+        "Reports source-backed facts separately from the recommendation and cites external sources."
+      ],
+      "must_not": [
+        "Calls one search result a complete comparison.",
+        "Uses popularity alone as a maintenance or license claim."
+      ]
+    },
+    {
+      "id": "license-and-risk",
+      "prompt": "这个开源库能不能用于闭源商业产品？顺便查一下最近是否还维护。",
+      "must": [
+        "Checks the actual license text and current project activity.",
+        "States whether the answer is verified, observed, inferred, recommended, or unknown.",
+        "Names conditions that would change the recommendation."
+      ],
+      "must_not": [
+        "Treats a repository star count as legal evidence.",
+        "Gives legal certainty beyond the source and scope checked."
+      ]
+    },
+    {
+      "id": "memory-conflict",
+      "prompt": "我记得这个 API 现在仍然支持旧参数，你先查当前官方行为再判断。",
+      "must": [
+        "Treats remembered behavior as a hypothesis.",
+        "Checks current official reference and a relevant implementation or test when available.",
+        "Prefers current evidence when it conflicts with memory."
+      ],
+      "must_not": [
+        "Repeats the remembered behavior as a fact without checking."
+      ]
+    },
+    {
+      "id": "local-answer-no-web",
+      "prompt": "只根据仓库里的现有配置告诉我测试命令是什么，不需要解释外部工具。",
+      "must": [
+        "Reads the repository configuration and scripts before answering.",
+        "Does not invent a command that is absent from the repository."
+      ],
+      "must_not": [
+        "Forces unrelated external research when the requested fact is local and explicit."
+      ]
+    }
+  ]
+}
