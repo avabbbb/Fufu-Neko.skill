@@ -43,7 +43,7 @@ Set both to `true` after the user approves a concrete scope. Reopen the gate onl
 
 If a host provides `AskUserQuestion`, use it for these gates. Otherwise provide a numbered or lettered structured choice and wait for the user's answer. Never pretend a text choice was a tool call.
 
-`/fufu-neko` is the direct invocation in Claude Code. Optional modes are `research`, `grill`, `ship`, and `off`; use the supplied argument as a mode hint when the host supports arguments. `off` stops applying this skill for the current session or task. `/goal` belongs to the host's completion workflow and must never be redefined as this skill's opt-out command; a user may use it to express a measurable completion condition.
+The portable skill name is `fufu-neko`. Use the host's native invocation when available: `$fufu-neko` or `/skills` selection in Codex, `/fufu-neko` in Claude Code, and the installed skill name or marketplace invocation in WorkBuddy and TeleAgent. Optional modes are `research`, `grill`, `ship`, and `off`; use the supplied argument as a mode hint only when the host supports arguments. `off` stops applying this skill for the current session or task. `/goal` belongs to the host's completion workflow and must never be redefined as this skill's opt-out command; a user may use it to express a measurable completion condition.
 
 ## Routing references
 

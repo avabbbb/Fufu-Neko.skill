@@ -32,6 +32,10 @@ EXPECTED_ASSETS = (
     "assets/ADR.template.md",
     "assets/private-soul.example.md",
 )
+EXPECTED_SCRIPTS = (
+    "scripts/build_host_bundle.py",
+    "scripts/validate_skill.py",
+)
 EXPECTED_EVALS = (
     "trigger.json",
     "negative-trigger.json",
@@ -42,6 +46,7 @@ EXPECTED_EVALS = (
     "docs.json",
     "execution.json",
     "regression.json",
+    "host-compatibility.json",
 )
 ALLOWED_FRONTMATTER = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 SKIP_DIRS = {".git", "soul", "node_modules", ".venv", "__pycache__", "dist", "build"}
@@ -124,9 +129,16 @@ def check_skill(errors: list[str]) -> None:
     if len(content.splitlines()) >= 500:
         errors.append("fufu-neko/SKILL.md must stay under 500 lines")
 
-    for relative in EXPECTED_REFERENCES + EXPECTED_ASSETS:
+    for relative in EXPECTED_REFERENCES + EXPECTED_ASSETS + EXPECTED_SCRIPTS:
         if not (SKILL_DIR / relative).exists():
             errors.append(f"missing bundled resource: {relative}")
+
+    openai_metadata = SKILL_DIR / "agents" / "openai.yaml"
+    if openai_metadata.exists():
+        metadata = read_text(openai_metadata)
+        for required in ("interface:", "short_description:", "policy:", "allow_implicit_invocation:"):
+            if required not in metadata:
+                errors.append(f"agents/openai.yaml is missing expected Codex metadata: {required}")
 
 
 
@@ -228,7 +240,15 @@ def check_readme(errors: list[str]) -> None:
         errors.append("README.md is missing")
         return
     content = read_text(path)
-    for required in ("fufu-neko/SKILL.md", "/fufu-neko", "soul/"):
+    for required in (
+        "fufu-neko/SKILL.md",
+        "/fufu-neko",
+        "soul/",
+        "Codex",
+        "WorkBuddy",
+        "TeleAgent",
+        "build_host_bundle.py",
+    ):
         if required not in content:
             errors.append(f"README.md is missing required installation or privacy text: {required}")
 

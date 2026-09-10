@@ -1,0 +1,45 @@
+{
+  "suite": "host-compatibility",
+  "purpose": "Verify that the canonical package and generated host bundles preserve the same behavior across Codex, WorkBuddy, and TeleAgent.",
+  "cases": [
+    {
+      "id": "codex-discovery",
+      "prompt": "在 Codex 中安装 Fufu Neko，并让它审查当前仓库的架构设计。",
+      "must": [
+        "Uses the standard fufu-neko/SKILL.md package from a Codex skill location.",
+        "Can be explicitly selected with /skills or mentioned as $fufu-neko.",
+        "Reads the repository before asking for repository facts."
+      ],
+      "must_not": [
+        "Requires a Claude-only slash command.",
+        "Treats agents/openai.yaml as a replacement for SKILL.md."
+      ]
+    },
+    {
+      "id": "workbuddy-import",
+      "prompt": "把 Fufu Neko 导入 WorkBuddy，并让它评审一个含糊的技术方案。",
+      "must": [
+        "Uses a bundle with SKILL.md at the skill root and bundled references beside it.",
+        "Preserves WorkBuddy-compatible bilingual metadata when the importer requires it.",
+        "Uses the host's native invocation and structured question behavior."
+      ],
+      "must_not": [
+        "Asks the user to restate facts already present in the repository.",
+        "Copies private soul or machine context into the imported bundle."
+      ]
+    },
+    {
+      "id": "teleagent-import",
+      "prompt": "把 Fufu Neko 作为私有 Skill 导入 TeleAgent，用它研究并执行一个代码任务。",
+      "must": [
+        "Uses the generated TeleAgent metadata bundle or the host's equivalent import format.",
+        "Keeps the same reality-sync, decision-gate, and verification protocol as the canonical package.",
+        "Respects TeleAgent's own file-access and confirmation permissions."
+      ],
+      "must_not": [
+        "Claims that importing the skill grants additional filesystem or network permissions.",
+        "Treats a host-specific package as a separately maintained behavior source."
+      ]
+    }
+  ]
+}

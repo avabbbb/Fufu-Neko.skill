@@ -47,7 +47,7 @@ She does the research that tools can do, then asks only for the decision that be
 
 ## Modes
 
-In Claude Code, the skill directory supplies the direct command `/fufu-neko`. A host that supports invocation arguments can use:
+The portable skill name is `fufu-neko`. Hosts expose the same modes through their own invocation syntax:
 
 ```text
 /fufu-neko             normal mode for the current task
@@ -56,6 +56,8 @@ In Claude Code, the skill directory supplies the direct command `/fufu-neko`. A 
 /fufu-neko ship        execute and verify a locked scope
 /fufu-neko off         stop applying this skill for the current task or session
 ```
+
+In Codex, use `$fufu-neko` with the same mode words or choose it through `/skills`. WorkBuddy and TeleAgent use their installed skill name and native invocation UI.
 
 `/goal` remains the host's completion-condition command. Fufu Neko does not assign it an opt-out meaning. Use the host command when you want a measurable condition to drive continued work.
 
@@ -70,6 +72,46 @@ It should stay out of the way for simple arithmetic, direct translation, light c
 The public persona source lives in `fufu-neko/references/persona/`. It describes Fufu's character and voice without personal context. Keep personal preferences and machine notes in a local ignored `soul/` directory, or another private location, and start from [`private-soul.example.md`](fufu-neko/assets/private-soul.example.md).
 
 Never place credentials, tokens, private addresses, personal memory, relationship details, or machine-specific paths in a public persona file. The repository validator checks that local `soul/` is ignored and that no private soul file is tracked.
+
+## Use with Codex, WorkBuddy, and TeleAgent
+
+The same canonical `fufu-neko/` directory is the source for all three hosts. It contains one standard `SKILL.md`; host-specific metadata is generated only when an importer needs it.
+
+### Codex
+
+Codex discovers repository skills from `.agents/skills` and user skills from `$HOME/.agents/skills`. Install the canonical directory with PowerShell:
+
+```powershell
+$codexSkill = Join-Path $HOME ".agents\skills\fufu-neko"
+New-Item -ItemType Directory -Force (Split-Path $codexSkill) | Out-Null
+Copy-Item -Recurse -Force .\fufu-neko $codexSkill
+```
+
+In Codex, use `/skills` to select it or mention `$fufu-neko`. If your Codex build exposes the installer, you can also ask `$skill-installer` to install `https://github.com/avabbbb/Fufu-Neko.skill/tree/main/fufu-neko`.
+
+### WorkBuddy
+
+WorkBuddy accepts a skill directory containing `SKILL.md`, references, and scripts. The Open Platform marketplace is the preferred import path. If its importer requires WorkBuddy-specific display and bilingual metadata, build an upload-ready bundle:
+
+```bash
+python fufu-neko/scripts/build_host_bundle.py --host workbuddy
+```
+
+Zip `dist/workbuddy/fufu-neko/` with `SKILL.md` at the archive's skill root, then import it through WorkBuddy's Skills interface. A local WorkBuddy-compatible runner may instead use `~/.workbuddy/skills/fufu-neko/`. Invoke it by the displayed skill name or let the description matcher select it.
+
+### TeleAgent
+
+TeleAgent supports imported and private skills. Build the bundle with the Chinese metadata fields used by TeleAgent skill packages:
+
+```bash
+python fufu-neko/scripts/build_host_bundle.py --host teleagent
+```
+
+Import or copy `dist/teleagent/fufu-neko/` through the TeleAgent skill interface. Some desktop builds expose a local skills directory such as `~/.config/TeleAgent/skills/`; use the path configured by the installed build. Keep private soul files outside the bundle.
+
+The host-specific bundle generator copies the canonical references and adds loading hints; it does not maintain a second behavior implementation.
+
+The host details follow the [Codex skill documentation](https://developers.openai.com/codex/skills/), [WorkBuddy Skill documentation](https://open.workbuddy.cn/en/docs/skill), and [TeleAgent's official product documentation](https://www.teleai.com.cn/product/teleagent). Host UI labels and local paths can change independently of the skill format.
 
 ## Install
 
@@ -107,6 +149,8 @@ Restart the host if it did not watch the destination before installation. Then i
 ├── .gitignore
 ├── fufu-neko/
 │   ├── SKILL.md
+│   ├── agents/
+│   │   └── openai.yaml
 │   ├── references/
 │   │   ├── persona/
 │   │   │   ├── core.md
@@ -124,6 +168,7 @@ Restart the host if it did not watch the destination before installation. Then i
 │   │   ├── ADR.template.md
 │   │   └── private-soul.example.md
 │   └── scripts/
+│       ├── build_host_bundle.py
 │       └── validate_skill.py
 └── evals/
     ├── trigger.json
@@ -134,7 +179,8 @@ Restart the host if it did not watch the destination before installation. Then i
     ├── grill.json
     ├── docs.json
     ├── execution.json
-    └── regression.json
+    ├── regression.json
+    └── host-compatibility.json
 ```
 
 `SKILL.md` is the router. References are loaded when their mode is relevant. Assets are templates, and the validator is deterministic repository tooling rather than part of the agent's conversational instructions.
@@ -153,6 +199,13 @@ If the official reference validator is available in your environment, run it as 
 
 ```bash
 python path/to/quick_validate.py fufu-neko
+```
+
+Build a standalone WorkBuddy or TeleAgent upload bundle when the host requires extra frontmatter:
+
+```bash
+python fufu-neko/scripts/build_host_bundle.py --host workbuddy
+python fufu-neko/scripts/build_host_bundle.py --host teleagent
 ```
 
 The files under `evals/` are behavior fixtures. They describe observable passes and failures for trigger accuracy, reality sync, question quality, decision-tree grilling, docs consistency, scope lock, persona boundaries, private-soul safety, and regression behavior. Run each case in a fresh host session when measuring actual model behavior; a passing structure check alone is not a behavior verdict.
