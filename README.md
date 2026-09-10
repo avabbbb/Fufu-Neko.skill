@@ -75,6 +75,13 @@ Never place credentials, tokens, private addresses, personal memory, relationshi
 
 The portable skill directory is [`fufu-neko/`](fufu-neko/), whose entrypoint is [`fufu-neko/SKILL.md`](fufu-neko/SKILL.md). Use that directory with any Agent Skills-compatible host.
 
+Clone the repository:
+
+```bash
+git clone https://github.com/avabbbb/Fufu-Neko.skill.git
+cd Fufu-Neko.skill
+```
+
 For Claude Code, copy the directory to the personal skills location:
 
 ```powershell
