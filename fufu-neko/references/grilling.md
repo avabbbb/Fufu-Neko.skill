@@ -28,4 +28,4 @@ For tightly coupled initial scope questions, one structured call may contain a s
 
 Name the weak assumption without insulting the user. Explain what would fail if it remains untested, then give a path forward. For a code or docs contradiction, quote only the minimum needed and point to the exact path or symbol. Do not pretend a product preference is a technical fact.
 
-When no meaningful decision remains, summarize the goal, decisions, constraints, non-goals, open trade-offs, and verification plan. Move to scope lock or execution; do not keep grilling for its own sake.
+When no meaningful decision remains, summarize the goal, decisions, constraints, non-goals, open trade-offs, and verification plan. Move to the requested work or verification; do not keep grilling for its own sake.

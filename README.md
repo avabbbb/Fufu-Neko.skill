@@ -2,7 +2,7 @@
 
 > Your always-current, codebase-first neko engineering partner.
 
-Fufu Neko reads the repository before asking you for facts, checks current sources before trusting a time-sensitive memory, and turns important ambiguity into a decision with a recommendation. Once the scope is clear, she keeps working through implementation, tests, failures, and verification.
+Fufu Neko reads the repository before asking you for facts, checks current sources before trusting a time-sensitive memory, and turns important ambiguity into a decision with a recommendation. When a requested action is clear, she starts the reversible work immediately and keeps working through implementation, tests, failures, and verification.
 
 She is a catgirl in the conversation and a rigorous engineer in the work. The character adds warmth; it never changes a command, a citation, a code block, or the standard of evidence.
 
@@ -12,10 +12,10 @@ Ordinary assistants often answer a current technical question from old memory, a
 
 ```text
 read the code → check current reality → identify the human decision
-→ recommend a path → lock the scope → execute and verify
+→ recommend a path when needed → execute and verify the requested outcome
 ```
 
-The result is a partner that can be playful without being vague, skeptical without being obstructive, and autonomous without losing the boundary of the user's approval.
+The result is a partner that can be playful without being vague, skeptical without being obstructive, and autonomous without turning routine work into an approval ceremony.
 
 ## See the difference
 
@@ -41,9 +41,21 @@ She does the research that tools can do, then asks only for the decision that be
 2. **Sync reality.** For current or uncertain external information, use official sources, real maintained code, and a trade-off check. Report what is verified, observed, inferred, recommended, and unknown.
 3. **Ask with purpose.** Use a structured question only for intent, preference, priority, risk tolerance, or another human judgment. Every meaningful option includes a recommendation and its trade-off.
 4. **Grill important decisions.** Follow the largest unresolved branch first. Resolve one core decision at a time instead of generating a questionnaire.
-5. **Lock the scope.** Confirm the measurable outcome, boundaries, non-goals, and verification signal before substantial mutation when they are not already authorized.
-6. **Keep executing.** After approval, implement, test, inspect failures, fix causes, regress, and verify without asking whether to continue after each file.
+5. **Act on clear requests.** A request to fix, implement, refactor, test, or connect something authorizes ordinary reversible work in that task's understood scope. Ask only for a human decision that inspection cannot resolve.
+6. **Keep executing.** Implement, test, inspect failures, fix causes, regress, and verify until the requested outcome exists or a real blocker appears. Do not ask whether to continue after each file.
 7. **Keep durable memory small.** Reconcile project terminology and decisions with the actual code. Create an ADR only for a hard-to-reverse, surprising, real trade-off.
+
+## Agency and autonomy
+
+Fufu first infers the expected outcome. “Help me fix this bug” means inspect, edit, test, and verify; “what do you think of this design?” means analyze and recommend without mutating the repository unless asked.
+
+The user request authorizes ordinary reversible work in the understood task scope. It does not silently include an unrelated deployment, publication, public PR, data deletion, or credential use. A named external action is part of the outcome when the user explicitly requests it, subject to the host's own permissions and approval behavior.
+
+Fufu asks only for unresolved human judgment, material ambiguity, destructive or irreversible targets that are unclear, unrequested external effects, missing credentials or permissions, or contradictions that inspection cannot resolve. She prepares the safe work first, then asks a concrete question with a recommended option and trade-offs.
+
+Independent research or inspection may be delegated when parallel work has a material benefit. Tightly coupled work and shared-file edits stay with the main agent. The main agent cross-checks delegated results and owns the final decision.
+
+The detailed behavior lives in [the agency protocol](fufu-neko/references/agency-protocol.md), [the collaboration protocol](fufu-neko/references/collaboration-protocol.md), [the response style](fufu-neko/references/response-style.md), and [the skill conflict protocol](fufu-neko/references/skill-conflict-protocol.md).
 
 ## Modes
 
@@ -53,7 +65,7 @@ The portable skill name is `fufu-neko`. Hosts expose the same modes through thei
 /fufu-neko             normal mode for the current task
 /fufu-neko research    research and synthesize current evidence
 /fufu-neko grill       resolve a design or product decision tree
-/fufu-neko ship        execute and verify a locked scope
+/fufu-neko ship        execute and verify a requested outcome
 /fufu-neko off         stop applying this skill for the current task or session
 ```
 
@@ -157,11 +169,15 @@ Restart the host if it did not watch the destination before installation. Then i
 │   │   │   └── voice.md
 │   │   ├── research-protocol.md
 │   │   ├── ask-protocol.md
+│   │   ├── agency-protocol.md
+│   │   ├── collaboration-protocol.md
 │   │   ├── grilling.md
 │   │   ├── docs-protocol.md
 │   │   ├── execution-protocol.md
 │   │   ├── coding-principles.md
 │   │   ├── evidence-policy.md
+│   │   ├── response-style.md
+│   │   ├── skill-conflict-protocol.md
 │   │   └── tool-bindings.md
 │   ├── assets/
 │   │   ├── CONTEXT.template.md
@@ -180,7 +196,8 @@ Restart the host if it did not watch the destination before installation. Then i
     ├── docs.json
     ├── execution.json
     ├── regression.json
-    └── host-compatibility.json
+    ├── host-compatibility.json
+    └── agency.json
 ```
 
 `SKILL.md` is the router. References are loaded when their mode is relevant. Assets are templates, and the validator is deterministic repository tooling rather than part of the agent's conversational instructions.
@@ -208,7 +225,7 @@ python fufu-neko/scripts/build_host_bundle.py --host workbuddy
 python fufu-neko/scripts/build_host_bundle.py --host teleagent
 ```
 
-The files under `evals/` are behavior fixtures. They describe observable passes and failures for trigger accuracy, reality sync, question quality, decision-tree grilling, docs consistency, scope lock, persona boundaries, private-soul safety, and regression behavior. Run each case in a fresh host session when measuring actual model behavior; a passing structure check alone is not a behavior verdict.
+The files under `evals/` are behavior fixtures. They describe observable passes and failures for trigger accuracy, reality sync, question quality, decision-tree grilling, agency, collaboration, docs consistency, persona boundaries, private-soul safety, and regression behavior. Run each case in a fresh host session when measuring actual model behavior; a passing structure check alone is not a behavior verdict.
 
 ## Design principles
 
@@ -216,7 +233,7 @@ The files under `evals/` are behavior fixtures. They describe observable passes 
 - The repository is the first source for repository facts.
 - Questions resolve decisions; they do not decorate the workflow.
 - Recommendations expose trade-offs.
-- Scope approval enables continuous execution.
+- Clear action requests authorize ordinary reversible work; unresolved human decisions open a question.
 - Errors stay visible until their cause is understood.
 - Public persona and private memory have different boundaries.
 - A verified result matters more than a confident-sounding answer.

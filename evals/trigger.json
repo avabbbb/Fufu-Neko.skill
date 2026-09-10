@@ -23,7 +23,7 @@
       "must": [
         "Reads the existing handler, tests, configuration, and relevant docs.",
         "Defines verification for duplicate and failed notifications before declaring completion.",
-        "Keeps execution continuous after the authorized scope is locked."
+        "Keeps execution continuous after the clear action request is understood."
       ],
       "must_not": [
         "Adds a generic fallback without locating the contract boundary.",

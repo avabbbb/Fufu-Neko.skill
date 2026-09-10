@@ -1,52 +1,49 @@
-# Scope lock and autonomous execution
+# Execution to outcome
 
-Use this protocol for implementation, repository mutation, or a task whose completion depends on repeated checks.
+Use this protocol for implementation, repository mutation, and tasks whose completion depends on repeated checks. The user's clear action request supplies the default authorization for ordinary reversible work inside the understood task scope. The host still controls permissions and external effects.
 
 ## State
 
-Track:
+Track these conceptual values when useful:
 
-```text
-scope_locked = false
-execution_authorized = false
-```
+- task_intent_resolved;
+- authorization_scope;
+- open_human_decisions;
+- execution_state.
 
-Before substantial mutation, establish:
-
-- the measurable outcome;
-- in-scope surfaces and files;
-- non-goals and protected boundaries;
-- relevant external or repository evidence;
-- verification commands and runtime checks;
-- any action that is destructive, irreversible, credentialed, or externally visible.
-
-Once the user approves this scope, set both state values to `true` and continue. The approval covers routine implementation choices within that scope.
+They describe the working conversation and do not imply persistent state across hosts or turns. Re-inspect the repository when context was lost instead of claiming that an earlier decision still exists.
 
 ## Work loop
 
-Run the loop until the acceptance conditions are evidenced:
+Run the loop until the acceptance conditions have evidence:
 
-```text
 inspect → implement → test → inspect failures → fix causes
        → regression check → runtime or artifact verification → review
-```
 
 Use the repository's existing build, test, lint, type, and runtime commands. Add a meaningful check when the change has no existing coverage and the check is proportionate. Static checks do not prove runtime behavior when the requested behavior is observable only at runtime.
 
-Do not stop after one file, ask whether to continue after one command, or turn a complete request into a hidden minimal slice. If the user explicitly requests a prototype, spike, proof of concept, or MVP, state the hypothesis, exclusions, and exit signal before executing it.
+If a first check fails, inspect the failure and continue with the smallest root-cause repair that satisfies the requested outcome. Repeat the relevant checks. Do not stop after one file, one command, or a first version that merely runs.
 
-## Reopen the gate only for
+Do not ask whether to continue after a file edit, command, test, or ordinary implementation choice. Do not turn a complete request into a hidden minimal slice. If the user explicitly requests a prototype, spike, proof of concept, or MVP, state the hypothesis, deliberate exclusions, and exit signal, then execute that requested phase.
 
-- `MATERIAL_SCOPE_CHANGE`
-- `ARCHITECTURE_CHANGE`
-- `IRREVERSIBLE_ACTION`
-- `DESTRUCTIVE_ACTION`
-- `MISSING_HUMAN_JUDGMENT`
-- `CREDENTIAL_OR_PERMISSION_BLOCK`
-- `REQUIREMENT_CONTRADICTION`
+## Side effects and gates
 
-Routine errors belong in the work loop. A destructive command, external publish, credential use, or an unresolved choice requires a new structured decision with its exact target and consequence.
+A direct request for a named external action, such as opening a Draft PR, deploying to staging, publishing a site, or creating an issue, includes that action in the expected outcome. Prepare and verify the work before the final external operation. Apply the host's native permission gate when it exists.
+
+Ask only when:
+
+- the target or consequence of destructive or irreversible work is not clear;
+- a new external side effect was not requested;
+- a credential or host permission is missing;
+- the requirement or architecture has materially changed;
+- a human decision remains unresolved.
+
+Do not treat ordinary local work, a requested external action, or a host permission prompt as a reason to create a duplicate Skill approval ceremony.
+
+## Testing policy
+
+Test the user's observable behavior, regression path, contract, invariant, edge case, or integration boundary in proportion to the risk. Avoid tests that merely copy the implementation or exist only to increase coverage. A low-impact copy change may need only the existing checks, but it still needs an appropriate validation signal.
 
 ## Handoff
 
-Report the changed surfaces, verification evidence, failed or unavailable checks, and remaining risks. Separate a local verified result from a claim about production, a remote repository, or another environment that was not checked. Ask a question only if a real next decision remains.
+Report changed surfaces, commands and checks actually run, failures that remain, unavailable checks, and material risks. Separate local evidence from claims about production, a remote repository, or another environment that was not checked. Ask a question only if a real human decision remains.

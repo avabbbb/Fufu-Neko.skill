@@ -18,16 +18,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CANONICAL = ROOT / "fufu-neko"
 DEFAULT_OUTPUT = ROOT / "dist"
+PACKAGE_VERSION = "2.1.0"
 REFERENCE_FILES = (
     "references/persona/core.md",
     "references/persona/voice.md",
     "references/research-protocol.md",
     "references/ask-protocol.md",
+    "references/agency-protocol.md",
+    "references/collaboration-protocol.md",
     "references/grilling.md",
     "references/docs-protocol.md",
     "references/execution-protocol.md",
     "references/coding-principles.md",
     "references/evidence-policy.md",
+    "references/response-style.md",
+    "references/skill-conflict-protocol.md",
     "references/tool-bindings.md",
 )
 
@@ -40,15 +45,15 @@ HOSTS = {
         "display_name": "Fufu Neko",
         "display_name_en": "Fufu Neko",
         "description_zh": "代码库优先、研究当前现实、拷打重要设计并持续执行验证的猫娘工程搭档。",
-        "description_en": "A codebase-first engineering partner that checks current reality, grills important decisions, and executes and verifies after scope approval.",
+        "description_en": "A codebase-first engineering partner that checks current reality, grills important decisions, and executes and verifies clear requests.",
         "category": "engineering",
         "author": "avabbbb",
     },
     "teleagent": {
         "name_cn": "福福猫娘工程搭档",
-        "description_cn": "代码库优先、会核对当前资料、会追问关键决策并在确认范围后持续执行和验证的工程技能。",
+        "description_cn": "代码库优先、会核对当前资料、会追问关键决策，并在请求清晰后持续执行和验证的工程技能。",
         "description_zh": "代码库优先、研究当前现实、拷打重要设计并持续执行验证的猫娘工程搭档。",
-        "description_en": "A codebase-first engineering partner that checks current reality, grills important decisions, and executes and verifies after scope approval.",
+        "description_en": "A codebase-first engineering partner that checks current reality, grills important decisions, and executes and verifies clear requests.",
         "category": "engineering",
         "author": "avabbbb",
     },
@@ -90,7 +95,7 @@ def host_frontmatter(host: str, canonical: dict[str, str]) -> list[str]:
             "license: MIT",
             "metadata:",
             f"  author: {yaml_scalar(metadata['author'])}",
-            '  version: "2.0.0"',
+            f'  version: "{PACKAGE_VERSION}"',
         ]
 
     lines = [
@@ -111,7 +116,7 @@ def host_frontmatter(host: str, canonical: dict[str, str]) -> list[str]:
             lines.append(f"{key}: {yaml_scalar(metadata[key])}")
     lines.extend(
         [
-            'version: "2.0.0"',
+            f'version: "{PACKAGE_VERSION}"',
             f"author: {yaml_scalar(metadata['author'])}",
             "license: MIT",
         ]
@@ -176,7 +181,11 @@ def build(host: str, output_root: Path) -> Path:
     ensure_within(output_root, destination)
     if destination.exists():
         shutil.rmtree(destination)
-    shutil.copytree(CANONICAL, destination)
+    shutil.copytree(
+        CANONICAL,
+        destination,
+        ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"),
+    )
 
     if host == "workbuddy":
         # WorkBuddy's Open Platform documents templates/ as its conventional

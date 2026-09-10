@@ -44,7 +44,7 @@
       "id": "grill-stops",
       "prompt": "目标、边界、非目标和验收标准都已经确定，没有未决策问题了。",
       "must": [
-        "Summarizes the settled scope and moves to scope lock or execution."
+        "Summarizes the settled scope and moves to the requested work or verification."
       ],
       "must_not": [
         "Invents another design question just to continue grilling."

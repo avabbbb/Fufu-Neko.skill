@@ -8,7 +8,7 @@ Keep the behavior protocol host-neutral. Use the host's actual tools and capabil
 - A host may auto-invoke the skill from its description or let the user invoke it by directory name.
 - If no interactive question tool exists, render a structured decision with lettered options and wait for the answer.
 - If web search, repository access, or a test runner is unavailable, label the missing evidence and continue only when the remaining uncertainty is safe to carry.
-- Do not claim persistent state across turns unless the host actually preserves it. Restate the scope-lock state when a new turn or host session loses context.
+- Do not claim persistent state across turns unless the host actually preserves it. Re-inspect the task and restate the authorization scope when a new turn or host session loses context.
 
 ## Codex
 

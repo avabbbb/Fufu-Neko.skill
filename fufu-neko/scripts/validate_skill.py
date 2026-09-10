@@ -20,11 +20,15 @@ EXPECTED_REFERENCES = (
     "references/persona/voice.md",
     "references/research-protocol.md",
     "references/ask-protocol.md",
+    "references/agency-protocol.md",
+    "references/collaboration-protocol.md",
     "references/grilling.md",
     "references/docs-protocol.md",
     "references/execution-protocol.md",
     "references/coding-principles.md",
     "references/evidence-policy.md",
+    "references/response-style.md",
+    "references/skill-conflict-protocol.md",
     "references/tool-bindings.md",
 )
 EXPECTED_ASSETS = (
@@ -47,6 +51,7 @@ EXPECTED_EVALS = (
     "execution.json",
     "regression.json",
     "host-compatibility.json",
+    "agency.json",
 )
 ALLOWED_FRONTMATTER = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 SKIP_DIRS = {".git", "soul", "node_modules", ".venv", "__pycache__", "dist", "build"}
@@ -194,6 +199,42 @@ def check_goal_semantics(errors: list[str]) -> None:
                 errors.append(f"review /goal wording in {path.relative_to(ROOT)}: {', '.join(suspicious)}")
 
 
+def check_agency_contract(errors: list[str]) -> None:
+    if not SKILL_FILE.exists():
+        return
+    skill_content = read_text(SKILL_FILE)
+    required = (
+        "## Working state",
+        "task_intent_resolved",
+        "authorization_scope",
+        "open_human_decisions",
+        "execution_state",
+        "Do reversible, in-scope work without redundant confirmation.",
+        "Continue through failures and regression checks",
+        "Explicit user instructions override Fufu defaults",
+    )
+    for phrase in required:
+        if phrase not in skill_content:
+            errors.append(f"SKILL.md is missing Agency invariant: {phrase}")
+
+    stale_patterns = {
+        "legacy scope state": re.compile(r"\b(?:scope_locked|execution_authorized)\b"),
+        "legacy approval-before-implementation gate": re.compile(
+            r"before\s+substantial\s+(?:mutation|implementation).{0,120}(?:approval|approve)",
+            re.IGNORECASE | re.DOTALL,
+        ),
+        "legacy scope-lock phrase": re.compile(r"\bscope\s+lock\b", re.IGNORECASE),
+    }
+    current_validator = Path(__file__).resolve()
+    for path in public_files():
+        if path == current_validator:
+            continue
+        content = read_text(path)
+        for label, pattern in stale_patterns.items():
+            if pattern.search(content):
+                errors.append(f"{label} remains in public file {path.relative_to(ROOT)}")
+
+
 def check_duplicate_paragraphs(errors: list[str]) -> None:
     seen: dict[str, list[str]] = defaultdict(list)
     for path in public_files():
@@ -248,6 +289,10 @@ def check_readme(errors: list[str]) -> None:
         "WorkBuddy",
         "TeleAgent",
         "build_host_bundle.py",
+        "agency-protocol.md",
+        "collaboration-protocol.md",
+        "response-style.md",
+        "skill-conflict-protocol.md",
     ):
         if required not in content:
             errors.append(f"README.md is missing required installation or privacy text: {required}")
@@ -308,6 +353,7 @@ def main() -> int:
     check_relative_links(errors)
     check_public_brand(errors)
     check_goal_semantics(errors)
+    check_agency_contract(errors)
     check_duplicate_paragraphs(errors)
     check_evals(errors)
     check_readme(errors)

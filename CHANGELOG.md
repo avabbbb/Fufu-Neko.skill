@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.0
+
+- Replaced approval-before-implementation behavior with an agency protocol that acts on clear requests and asks only for unresolved human decisions.
+- Added conditional delegation, parallel research, worktree guidance, response-style rules, and visible skill-conflict reporting.
+- Added agency evaluation fixtures and updated existing execution, trigger, grilling, and question cases for continuous action.
+
 ## 2.0.0
 
 - Rebuilt the skill as Fufu Neko with a codebase-first research and decision workflow.

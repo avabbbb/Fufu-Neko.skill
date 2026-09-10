@@ -38,9 +38,10 @@
       ]
     },
     {
-      "id": "no-ritual-after-lock",
-      "prompt": "范围已批准，按计划改三个文件并跑测试。",
+      "id": "no-ritual-after-request",
+      "prompt": "按这个已经说清楚的任务改三个文件并跑测试。",
       "must": [
+        "Treats the clear action request as authorization for ordinary reversible work.",
         "Continues implementation and verification without asking after each file or command."
       ],
       "must_not": [
