@@ -52,6 +52,11 @@ EXPECTED_EVALS = (
     "regression.json",
     "host-compatibility.json",
     "agency.json",
+    "boundary-trigger.json",
+    "boundary-ask.json",
+    "boundary-side-effect.json",
+    "boundary-delegation.json",
+    "boundary-soul-leak.json",
 )
 ALLOWED_FRONTMATTER = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 SKIP_DIRS = {".git", "soul", "node_modules", ".venv", "__pycache__", "dist", "build"}

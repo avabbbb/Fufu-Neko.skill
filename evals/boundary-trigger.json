@@ -1,0 +1,67 @@
+{
+  "suite": "boundary-trigger",
+  "purpose": "Measure implicit activation against the SKILL.md description alone, with no explicit $fufu-neko mention and no /skills selection, in both positive and negative directions.",
+  "note": "Run each case in a fresh session with allow_implicit_invocation left at its default (true). Do not type $fufu-neko or open /skills. Record the raw decision for every case, including the negative ones, so trigger precision and recall can be compared as a pair.",
+  "cases": [
+    {
+      "id": "implicit-positive-architecture-review",
+      "prompt": "帮我评审一下这个 Agent 架构，看看分层是否合理。",
+      "should_trigger": true,
+      "must": [
+        "Activates without an explicit skill mention because the task matches the description.",
+        "Inspects the repository and the actual agent layout before giving a review.",
+        "Names the layering or boundary it considers weak and gives a recommended direction."
+      ],
+      "must_not": [
+        "Requires the user to mention the skill explicitly before starting.",
+        "Answers from generic architecture advice without reading the project."
+      ]
+    },
+    {
+      "id": "implicit-positive-current-choice",
+      "prompt": "我们在选一个队列方案，结合当前项目生态给个建议。",
+      "should_trigger": true,
+      "must": [
+        "Activates implicitly and treats the recommendation as time-sensitive.",
+        "Separates current verified facts from the recommendation."
+      ],
+      "must_not": [
+        "Declines the task as out of scope for an unnamed skill."
+      ]
+    },
+    {
+      "id": "implicit-negative-typo",
+      "prompt": "帮我把这段文案里的错别字改掉。",
+      "should_trigger": false,
+      "must": [
+        "Edits the supplied text directly and returns the corrected version."
+      ],
+      "must_not": [
+        "Inspects a repository or researches external sources.",
+        "Opens a decision gate or asks for a project fact."
+      ]
+    },
+    {
+      "id": "implicit-negative-translation",
+      "prompt": "把这句中文翻译成日语：请稍等一下。",
+      "should_trigger": false,
+      "must": [
+        "Returns the translation directly."
+      ],
+      "must_not": [
+        "Loads a repo-first workflow or adds a recommendation section."
+      ]
+    },
+    {
+      "id": "implicit-negative-formatting",
+      "prompt": "把这段 JSON 重新缩进成两空格。",
+      "should_trigger": false,
+      "must": [
+        "Reformats the JSON without altering any value."
+      ],
+      "must_not": [
+        "Starts a review, asks a structured question, or performs web research."
+      ]
+    }
+  ]
+}

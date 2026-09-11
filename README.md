@@ -123,7 +123,38 @@ Import or copy `dist/teleagent/fufu-neko/` through the TeleAgent skill interface
 
 The host-specific bundle generator copies the canonical references and adds loading hints; it does not maintain a second behavior implementation.
 
-The host details follow the [Codex skill documentation](https://developers.openai.com/codex/skills/), [WorkBuddy Skill documentation](https://open.workbuddy.cn/en/docs/skill), and [TeleAgent's official product documentation](https://www.teleai.com.cn/product/teleagent). Host UI labels and local paths can change independently of the skill format.
+The host details follow the [Codex skill documentation](https://developers.openai.com/codex/skills/), [WorkBuddy Skill documentation](https://open.workbuddy.cn/en/docs/skill), and [TeleAgent's official product documentation](https://www.teleai.com.cn/product/teleagent). Host UI labels and local paths can change independently of the skill format. The Codex page is currently served under the title "Build skills"; the discovery paths and invocation rules described here are unchanged.
+
+## Validation status
+
+This project separates a well-formed package from a demonstrated behavior. Codex is the host with recorded sessions; the other hosts are not yet. Read the claim, not the impression:
+
+```text
+Codex
+  Skill discovery:          Runtime validated
+  Agency behavior:          Runtime validated
+  Repository-first:         Runtime validated
+  Side-effect boundary:     Sample validated, needs explicit-authorization control
+  Persona vs execution:     Sample validated, needs regression
+
+Claude Code
+  Structure / permission:   Spec aligned
+  Runtime behavior:         Pending / partial
+
+WorkBuddy
+  Bundle generation:        Validated
+  Runtime session:          Unverified
+
+TeleAgent
+  Bundle generation:        Validated
+  Runtime session:          Unverified
+```
+
+A passing repository validator and a successful bundle build are packaging results. Neither is a behavior verdict, and neither is described here as runtime support.
+
+Failures that belong to the harness rather than to the skill are tracked separately and are not treated as skill defects: a Windows sandbox helper environment failure, an incomplete orchestrator helper, and temporary fixture cleanup. The skill decides what the agent intends to do; the host decides what is allowed. When a run stops at a host gate, the correct report is the gate.
+
+The full ledger, the evidence behind each row, and the next round of boundary controls live in [`VALIDATION.md`](VALIDATION.md).
 
 ## Install
 
@@ -156,6 +187,7 @@ Restart the host if it did not watch the destination before installation. Then i
 ```text
 .
 ├── README.md
+├── VALIDATION.md
 ├── LICENSE
 ├── CHANGELOG.md
 ├── .gitignore
@@ -197,7 +229,12 @@ Restart the host if it did not watch the destination before installation. Then i
     ├── execution.json
     ├── regression.json
     ├── host-compatibility.json
-    └── agency.json
+    ├── agency.json
+    ├── boundary-trigger.json
+    ├── boundary-ask.json
+    ├── boundary-side-effect.json
+    ├── boundary-delegation.json
+    └── boundary-soul-leak.json
 ```
 
 `SKILL.md` is the router. References are loaded when their mode is relevant. Assets are templates, and the validator is deterministic repository tooling rather than part of the agent's conversational instructions.
@@ -226,6 +263,8 @@ python fufu-neko/scripts/build_host_bundle.py --host teleagent
 ```
 
 The files under `evals/` are behavior fixtures. They describe observable passes and failures for trigger accuracy, reality sync, question quality, decision-tree grilling, agency, collaboration, docs consistency, persona boundaries, private-soul safety, and regression behavior. Run each case in a fresh host session when measuring actual model behavior; a passing structure check alone is not a behavior verdict.
+
+The `boundary-*.json` suites are controls rather than feature tests. They probe where the behavior should stop: implicit activation without an explicit mention, ASK only when a human decision truly remains, external side effects as a matched pair, delegation with and without independent boundaries, and a tracer that must never escape the private soul file. [`VALIDATION.md`](VALIDATION.md) defines the status vocabulary, the per-capability ledger, and how to record a run.
 
 ## Design principles
 

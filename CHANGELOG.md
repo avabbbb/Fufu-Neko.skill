@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.1
+
+- Added `VALIDATION.md`: a status vocabulary, a per-capability ledger separating runtime-validated behavior from packaging results, and the layering rule that the skill decides intent while the host decides permission.
+- Added five boundary control suites to `evals/`: implicit activation without an explicit mention, ASK only when a human decision truly remains, external side effects as a matched pair, delegation with and without independent boundaries, and a private-soul tracer that must not escape.
+- Registered the boundary suites in the validator's expected fixture list, so a missing or malformed control file now fails the package check.
+- Added a README validation-status section so bundle generation is never described as runtime support, and separated host and harness failures from skill correctness.
+- Documented a proposed `description` rewrite as a held-back change, to be applied after the implicit-trigger baseline is recorded.
+
 ## 2.1.0
 
 - Replaced approval-before-implementation behavior with an agency protocol that acts on clear requests and asks only for unresolved human decisions.

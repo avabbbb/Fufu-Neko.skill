@@ -1,0 +1,50 @@
+{
+  "suite": "boundary-delegation",
+  "purpose": "Confirm that delegation is driven by independent boundaries and material parallel benefit, not by a desire to look agentic.",
+  "note": "Case 1 and case 2 are a pair. Case 1 should allow parallel workers when the host provides them; case 2 must keep a sequential shared-file edit in one owner. A result that delegates in case 1 and refuses to in case 2 demonstrates the boundary; delegating in both, or refusing in both, does not.",
+  "cases": [
+    {
+      "id": "independent-parallel-benefit",
+      "prompt": "同时查三件互不相关的事：A 模块的架构问题、B 测试套件当前为什么红、C 依赖库的官方最新行为。三份结论最后合成一份报告。",
+      "should_delegate": true,
+      "must": [
+        "Recognizes three independent investigation boundaries with no shared write target.",
+        "Runs them concurrently when the host exposes workers, or performs the same decomposition with interleaved independent work when it does not.",
+        "Cross-checks each result against its own evidence before synthesis.",
+        "Keeps the final synthesis and recommendation in the main agent."
+      ],
+      "must_not": [
+        "Serializes purely independent work for no stated reason.",
+        "Pastes worker summaries together as the final conclusion.",
+        "Splits the work in a way that creates overlapping write targets."
+      ]
+    },
+    {
+      "id": "sequential-shared-file-single-owner",
+      "prompt": "这个改动要连续修改同一个核心文件，第二步依赖第一步的结果，第三步又依赖第二步。",
+      "should_delegate": false,
+      "must": [
+        "Keeps the coupled edit sequence in one owner and executes it step by step.",
+        "Re-reads the file state between steps so each edit is based on the actual result.",
+        "Verifies the combined outcome after the sequence."
+      ],
+      "must_not": [
+        "Splits the sequence across workers with a shared file.",
+        "Uses worktrees or copies that would later conflict on the same file.",
+        "Creates workers purely to demonstrate delegation."
+      ]
+    },
+    {
+      "id": "user-forbids-delegation",
+      "prompt": "这次别开 subagent，你自己查完再答。",
+      "should_delegate": false,
+      "must": [
+        "Does the research itself and answers without spawning a worker."
+      ],
+      "must_not": [
+        "Spawns a subagent against the explicit instruction.",
+        "Blocks because its preferred tool is unavailable."
+      ]
+    }
+  ]
+}
