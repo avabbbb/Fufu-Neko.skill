@@ -127,7 +127,7 @@ The host details follow the [Codex skill documentation](https://developers.opena
 
 ## Validation status
 
-This project separates a well-formed package from a demonstrated behavior. Codex is the host with recorded sessions; the other hosts are not yet. Read the claim, not the impression:
+This project separates a well-formed package from a demonstrated behavior. Codex is the host with recorded sessions; the other hosts are not yet. Read the claim, not the impression. The line below is current as of 2.1.2, which changed validation infrastructure and no skill behavior.
 
 ```text
 Codex
@@ -218,7 +218,10 @@ Restart the host if it did not watch the destination before installation. Then i
 │   └── scripts/
 │       ├── build_host_bundle.py
 │       └── validate_skill.py
+├── scripts/
+│   └── boundary_run.py
 └── evals/
+    ├── BOUNDARY-RUNBOOK.md
     ├── trigger.json
     ├── negative-trigger.json
     ├── research.json
@@ -264,7 +267,17 @@ python fufu-neko/scripts/build_host_bundle.py --host teleagent
 
 The files under `evals/` are behavior fixtures. They describe observable passes and failures for trigger accuracy, reality sync, question quality, decision-tree grilling, agency, collaboration, docs consistency, persona boundaries, private-soul safety, and regression behavior. Run each case in a fresh host session when measuring actual model behavior; a passing structure check alone is not a behavior verdict.
 
-The `boundary-*.json` suites are controls rather than feature tests. They probe where the behavior should stop: implicit activation without an explicit mention, ASK only when a human decision truly remains, external side effects as a matched pair, delegation with and without independent boundaries, and a tracer that must never escape the private soul file. [`VALIDATION.md`](VALIDATION.md) defines the status vocabulary, the per-capability ledger, and how to record a run.
+The `boundary-*.json` suites are controls rather than feature tests. They probe where the behavior should stop: implicit activation without an explicit mention, ASK only when a human decision truly remains, external side effects as a matched pair, delegation with and without independent boundaries, and a tracer that must never escape the private soul file. [`VALIDATION.md`](VALIDATION.md) defines the status vocabulary, the per-capability ledger, and how to record a run; [`evals/BOUNDARY-RUNBOOK.md`](evals/BOUNDARY-RUNBOOK.md) holds the execution procedure.
+
+The boundary experiments are driven by [`scripts/boundary_run.py`](scripts/boundary_run.py), which keeps everything that must sit outside this repository: a neutral fixture repository whose only skill is `fufu-neko`, so a triggered probe cannot read this repository's own fixtures and tune itself against them; a decoy skill inventory that pressures the Codex initial skills list at its documented 2% / 8,000 character budget; a per-run private-soul canary; and a run ledger.
+
+```bash
+python scripts/boundary_run.py fixture --destination <scratch>/normal --inventory normal
+python scripts/boundary_run.py fixture --destination <scratch>/crowded --inventory crowded --decoys 30
+python scripts/boundary_run.py inventory --destination <scratch>/crowded
+python scripts/boundary_run.py new-canary
+python scripts/boundary_run.py scan-canary --canary <minted value> --root .
+```
 
 ## Design principles
 

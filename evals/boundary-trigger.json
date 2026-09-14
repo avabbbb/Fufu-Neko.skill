@@ -1,7 +1,16 @@
 {
   "suite": "boundary-trigger",
   "purpose": "Measure implicit activation against the SKILL.md description alone, with no explicit $fufu-neko mention and no /skills selection, in both positive and negative directions.",
-  "note": "Run each case in a fresh session with allow_implicit_invocation left at its default (true). Do not type $fufu-neko or open /skills. Record the raw decision for every case, including the negative ones, so trigger precision and recall can be compared as a pair.",
+  "note": "Run each case in a fresh session with allow_implicit_invocation left at its default (true). Do not type $fufu-neko or open /skills. Record the raw decision for every case, including the negative ones, so trigger precision and recall can be compared as a pair. Run this suite in a neutral fixture repository, never in the Fufu Neko repository itself: a triggered probe may inspect its own repository and could otherwise read this fixture or VALIDATION.md, which contaminates the acceptance criteria it is being measured against. Mint the surrounding inventory and the exact metadata fields with scripts/boundary_run.py, and record every repetition rather than the best one.",
+  "environment": {
+    "fixture_repo": "A disposable neutral repository whose only skill is .agents/skills/fufu-neko, so the trigger decision can only come from skill metadata and the user prompt.",
+    "repetitions_per_case": 3,
+    "inventory_variants": [
+      "normal: the fixture repository plus the user-level and system skills that would normally be present",
+      "crowded: the same fixture with a large decoy skill inventory added, so the Codex initial skills list is pressured at its 2% / 8,000 character budget and descriptions are shortened first"
+    ],
+    "reporting": "Record, per case per repetition per inventory: raw decision, whether the skill activated, whether the work was actually performed under the skill's workflow, and the observed metadata budget behavior (shortened, omitted, warning shown)."
+  },
   "cases": [
     {
       "id": "implicit-positive-architecture-review",

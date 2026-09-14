@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.2
+
+- Fixed the private-soul canary fixture: the concrete value is no longer committed, so the zero-hit condition is satisfiable. A fresh `FUFU_PRIVATE_CANARY_<UUID>` is minted per run.
+- Widened the canary scan to the whole tree, not only git-tracked files, because a leaked generated artifact, an attached patch, or a staged file would all be invisible to a tracked-only scan.
+- Added `scripts/boundary_run.py`: a neutral fixture repository, a decoy skill inventory that pressures the Codex initial-skills budget, the runtime canary, and the run ledger.
+- Added `evals/BOUNDARY-RUNBOOK.md`: phase order, repetition counts, scoring, and the rule that one observation is one piece of evidence.
+- Extended the run metadata to include repository SHA, Codex version, model, reasoning effort, approval mode, sandbox mode, OS, CWD, installed skill count and inventory, inventory variant, session mode, exact prompt, repetition, transcript reference, and raw outcome.
+- Restated `VALIDATION.md` around the boundary program. No capability was upgraded in this release; it adds the ability to measure, not measurements.
+- Behavior changed: none. This release touches validation infrastructure, harness tooling, and documentation only.
+
 ## 2.1.1
 
 - Added `VALIDATION.md`: a status vocabulary, a per-capability ledger separating runtime-validated behavior from packaging results, and the layering rule that the skill decides intent while the host decides permission.
