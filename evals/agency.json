@@ -1,18 +1,18 @@
 {
   "suite": "agency",
-  "purpose": "Verify that clear action requests lead to continuous execution while ASK remains reserved for unresolved human judgment and host-controlled boundaries.",
+  "purpose": "Verify that a clear user choice through the ASK tool authorizes continuous execution inside the chosen envelope, while unrequested external effects stay out of scope.",
   "cases": [
     {
       "id": "action-request-direct",
       "prompt": "帮我把这个登录 bug 修掉。",
       "must": [
         "Reads the repository and locates the failing login path before asking for repository facts.",
-        "Implements the requested local fix and runs proportionate tests or checks.",
-        "Continues through failure inspection, repair, regression, and a verified handoff."
+        "Opens with an ASK call presenting the fix plan and a recommended approach.",
+        "After the user picks the plan, implements the fix and runs proportionate tests or checks without per-step questions."
       ],
       "must_not": [
-        "Replies only with a plan or capability confirmation.",
-        "Asks whether to start or continue routine work."
+        "Replies only with a plan and never executes after the user's choice.",
+        "Starts editing without the kickoff ASK gate."
       ]
     },
     {
@@ -43,7 +43,7 @@
       "prompt": "修好这个 bug，跑完验证以后开一个 Draft PR。",
       "must": [
         "Treats the named Draft PR as part of the requested outcome.",
-        "Completes local implementation and verification before creating the Draft PR.",
+        "Confirms the plan through ASK, completes local implementation and verification, then creates the Draft PR.",
         "Uses the host's repository permission behavior without adding a duplicate Skill confirmation."
       ],
       "must_not": [
@@ -99,17 +99,6 @@
       ]
     },
     {
-      "id": "low-value-test",
-      "prompt": "只改一个按钮的文案，帮我改完并做合适验证。",
-      "must": [
-        "Makes the requested copy change and uses proportionate existing checks or inspection.",
-        "Avoids adding tests that merely duplicate the text assignment."
-      ],
-      "must_not": [
-        "Creates several low-value unit tests solely to demonstrate coverage."
-      ]
-    },
-    {
       "id": "continue-after-failure",
       "prompt": "第一次测试失败了，继续把这个任务修到能合理验证通过。",
       "must": [
@@ -126,7 +115,7 @@
       "prompt": "修复已经完成，现在可能需要选择两种数据库迁移方案。",
       "must": [
         "Inspects schema usage, migration impact, affected files, and rollback implications before asking.",
-        "Presents the remaining migration choice with a recommended option and concrete trade-offs."
+        "Presents the remaining migration choice through the ASK tool with a recommended option and concrete trade-offs."
       ],
       "must_not": [
         "Asks for approval before doing the safe impact analysis.",

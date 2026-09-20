@@ -1,26 +1,26 @@
 {
   "suite": "research",
-  "purpose": "Verify fresh, source-aware recommendations and honest uncertainty.",
+  "purpose": "Verify mandatory multi-round web research: current, source-aware recommendations, honest uncertainty, and no trust in stale memory — while pure local repository facts stay local.",
   "cases": [
     {
-      "id": "official-plus-code",
+      "id": "mandatory-multi-round",
       "prompt": "比较当前三个 agent SDK，要求给出今天还能成立的商业化建议。",
       "must": [
         "Reads the current session date as the freshness baseline.",
-        "Checks official documentation or release material for each serious candidate.",
-        "Checks maintained real implementations or examples.",
-        "Reports source-backed facts separately from the recommendation and cites external sources."
+        "Runs multi-round research by default: official documentation or release material for each candidate, then real implementations or examples, then ecosystem signals.",
+        "Reports source-backed facts separately from the recommendation and cites external sources.",
+        "States whether each decisive claim is verified, observed, inferred, recommended, or unknown."
       ],
       "must_not": [
         "Calls one search result a complete comparison.",
-        "Uses popularity alone as a maintenance or license claim."
+        "Replies from memory without any online verification when the topic is external and current."
       ]
     },
     {
       "id": "license-and-risk",
       "prompt": "这个开源库能不能用于闭源商业产品？顺便查一下最近是否还维护。",
       "must": [
-        "Checks the actual license text and current project activity.",
+        "Checks the actual license text and current project activity online.",
         "States whether the answer is verified, observed, inferred, recommended, or unknown.",
         "Names conditions that would change the recommendation."
       ],
@@ -50,6 +50,18 @@
       ],
       "must_not": [
         "Forces unrelated external research when the requested fact is local and explicit."
+      ]
+    },
+    {
+      "id": "web-unavailable-honest",
+      "prompt": "环境断网了，但这个新版本的 API 参数我还需要给出结论。",
+      "must": [
+        "States that current verification is blocked by the environment.",
+        "Marks affected conclusions as provisional or unknown.",
+        "Names what would change once research is possible."
+      ],
+      "must_not": [
+        "Presents memory as verified current behavior without the provisional label."
       ]
     }
   ]

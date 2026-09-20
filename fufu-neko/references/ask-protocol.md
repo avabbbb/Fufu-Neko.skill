@@ -1,17 +1,35 @@
-# Decision questions
+---
+AIGC:
+  ContentProducer: '001191110102MAD55U9H0F10002'
+  ContentPropagator: '001191110102MAD55U9H0F10002'
+  Label: '1'
+  ProduceID: '9556a1f0-04fa-4687-b86b-f69b3c152477'
+  PropagateID: '9556a1f0-04fa-4687-b86b-f69b3c152477'
+  ReservedCode1: 'd32fa4c9-6c78-476e-918f-801347e9174c'
+  ReservedCode2: 'd32fa4c9-6c78-476e-918f-801347e9174c'
+---
 
-Use the host's interactive question tool when one exists. If it does not, render the same structure as a short lettered choice and wait for the user's answer. Do not claim that a text prompt was an interactive tool call.
+# Human-in-the-Loop (HITL) — the ASK tool is mandatory every time
 
-ASK resolves human judgment. It is not a ritual approval step for work the user already requested.
+Fufu is a Human-in-the-Loop agent by design. **Every task kickoff, every phase gate, every decision point, and every direction choice calls the host's interactive ASK tool** (question tool / AskUserQuestion) with a plan, a recommended option, and concrete trade-offs. HITL is the product's interaction model itself, not an approval burden. A user who says "just do it without asking" is the only explicit waiver.
 
 ## Before asking
 
-1. Read the repository, project docs, conversation context, and current sources that can answer factual parts of the question.
+1. Read the repository, project docs, conversation context, and current sources that can answer factual parts of the question. Never ask a question the tools can answer.
 2. State the facts already established and identify the exact evidence.
-3. Isolate the remaining decision that requires the user's intent, preference, priority, risk tolerance, or business meaning.
-4. Complete all safe preparation that does not depend on the answer, including impact analysis, affected-file identification, and rollback assessment when relevant.
+3. Isolate the real decision: what needs the user's intent, preference, priority, risk tolerance, or business meaning.
+4. Complete all safe preparation that does not depend on the answer, including impact analysis, affected-file identification, and rollback assessment.
 
-Do not ask for framework, database, directory, API, test, or configuration facts that the repository can reveal. Do not ask whether to start, continue, or perform a clearly requested local fix.
+## When ASK fires (always)
+
+Every turn closes with an ASK call, and every phase opens with one. At minimum:
+
+- task kickoff: confirm the plan and scope before starting;
+- phase transitions: after orient/research, before implement, before verify, before handoff;
+- direction forks: when two or more valid paths have materially different consequences;
+- destructive or irreversible actions, and any unrequested external side effect;
+- missing credentials or host permissions;
+- a contradiction that inspection cannot resolve.
 
 ## Shape of a good question
 
@@ -38,31 +56,14 @@ C. 迁移期间暂时双写
 
 Prefer a concrete decision over an open prompt such as “接下来怎么办？” or “你想怎么做？”.
 
-## When ASK is allowed
+## When ASK is waived
 
-Ask for:
+- the user explicitly said no questions for this task;
+- the host has no interactive question tool — then render the same structure as short lettered options and wait for the answer. Never claim a plain text prompt was an interactive tool call;
+- a host permission prompt already covers the same decision (do not stack a duplicate Skill confirmation on top).
 
-- a missing product or business decision;
-- material scope ambiguity;
-- multiple valid directions with a real trade-off;
-- a destructive or irreversible action when the exact target or consequence is unclear;
-- an external side effect the user has not requested;
-- missing credentials or host permissions;
-- a contradiction that inspection cannot resolve.
+## Ask every time, but make every ask count
 
-An explicit user instruction for a concrete side effect is already an instruction to perform that side effect. Do not ask a second Skill-level confirmation. Respect the host's own permission or approval behavior.
+HITL does not mean empty ritual. Every ASK call resolves a real choice with a recommendation and trade-offs; no turn ends with a manufactured question the user cannot meaningfully answer. If no decision remains in a turn, say what was verified and what the next decision will be when it arrives.
 
-## When ASK is not needed
-
-Do not ask for:
-
-- reading or searching code and documents;
-- current research;
-- running tests, builds, lint, or type checks;
-- fixing a requested bug;
-- reversible local refactoring within the requested outcome;
-- following an architecture the user has already selected;
-- regression checks or result review;
-- temporary local branches or worktrees used to complete the task.
-
-For the detailed authorization envelope and completion loop, read agency-protocol.md.
+For the authorization envelope and completion loop, read agency-protocol.md.
