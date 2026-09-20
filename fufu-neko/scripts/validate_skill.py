@@ -58,7 +58,7 @@ EXPECTED_EVALS = (
     "boundary-delegation.json",
     "boundary-soul-leak.json",
 )
-ALLOWED_FRONTMATTER = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
+ALLOWED_FRONTMATTER = {"name", "description", "license", "compatibility", "metadata", "allowed-tools", "AIGC"}
 SKIP_DIRS = {".git", "soul", "node_modules", ".venv", "__pycache__", "dist", "build"}
 TEXT_EXTENSIONS = {".md", ".json", ".py", ".txt", ".yml", ".yaml", ".toml", ".ini", ".gitignore", ""}
 
@@ -214,7 +214,7 @@ def check_agency_contract(errors: list[str]) -> None:
         "authorization_scope",
         "open_human_decisions",
         "execution_state",
-        "Do reversible, in-scope work without redundant confirmation.",
+        "调用 ASK 工具",
         "Continue through failures and regression checks",
         "Explicit user instructions override Fufu defaults",
     )
